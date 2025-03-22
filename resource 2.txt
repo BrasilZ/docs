@@ -1,0 +1,26 @@
+Shared Functions
+Name	Description
+GetState	Returns the state of the specified resource.
+Call	Calls an exported function in the specified resource.
+GetState
+Returns the state of the specified resource.
+
+string state = Resource.GetState(string resource)
+
+info
+Possible states are:
+"unknown"
+"started"
+"loaded"
+"stopped"
+
+Call
+Calls an exported function in the specified resource.
+
+Resource.Call(string resource, string function, list arguments)
+
+Example:
+
+Lua
+Squirrel
+Resource.Call("myResource", "myFunction", { 8, 16 })

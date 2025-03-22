@@ -1,0 +1,65 @@
+WebUI
+Client Functions
+Name	Description
+Create	Creates a WebUI.
+Destroy	Destroys a WebUI.
+CallEvent	Calls an event on the WebUIs javascript.
+SetFocus	Sets focus on a WebUI (mouse & keyboard input).
+SetRect	Changes the size of the WebUI sprite.
+Create
+Creates a WebUI.
+
+int webuiID = WebUI.Create(string url, int width, int height, [optional] bool transparent)
+
+info
+To use a local resource file in the url argument, use "file://[resource]/[file]". Note that the file must be specified in the meta file.
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("chatCommand", function(command)
+    if command == "/webui" then
+        local testWebUI = WebUI.Create("file://freeroam/webui/index.html", 1920, 1080, true)
+    end
+end)
+
+Destroy
+Destroys a WebUI.
+
+WebUI.Destroy(int webuiID)
+
+CallEvent
+Calls an event on the WebUIs javascript.
+
+WebUI.CallEvent(int webuiID, string name, list arguments)
+
+Example:
+
+Lua
+Squirrel
+-- in client script:
+Events.Subscribe("chatCommand", function(command)
+    if command == "/webuievent" then
+        WebUI.CallEvent(g_webUI, "testEvent", { 3 })
+    end
+end)
+
+-- in js script:
+Events.Subscribe("testEvent", function(testint)
+{
+    console.log("testEvent was called: " + testint);
+});
+
+SetFocus
+Sets focus on a WebUI (mouse & keyboard input).
+
+WebUI.SetFocus(int webuiID, [optional] bool keepGameInput)
+
+info
+The current implementation only allows you to focus on one WebUI at a time. Use -1 as webuiID to reset the focus.
+
+SetRect
+Changes the size of the WebUI sprite.
+
+WebUI.SetRect(int webuiID, int left, int top, int right, int bottom)

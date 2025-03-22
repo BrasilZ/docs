@@ -1,0 +1,16 @@
+Console
+Shared Functions
+Name	Description
+Log	Prints a message to the console and the log file.
+Log
+Prints a message to the console and the log file.
+
+Console.Log(string message)
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("playerDisconnect", function(id, name, reason)
+    Console.Log("Player " .. name .. " has left the server with reason " .. reason .. ".")
+end)

@@ -1,0 +1,79 @@
+Client Functions
+Name	Description
+AddMessage	Adds a message to the chat.
+Clear	Clears all messages.
+IsInputActive	Returns whether the chat input is open.
+Server Functions
+Name	Description
+SendMessage	Sends a message to the specified player.
+BroadcastMessage	Sends a message to all players.
+AddMessage
+Adds a message to the chat.
+
+Chat.AddMessage(string message)
+
+warning
+Remember that this is a client function and the message is therefore only displayed for the client who executed the code.
+
+tip
+You can change the text color of message parts by placing a hex color code in a curly bracket in front of it. See the example below.
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("scriptInit", function()
+    Chat.AddMessage("{0000FF}This part is blue. {FFFFFF}And this part is white.")
+end)
+
+Clear
+Clears all messages.
+
+Chat.Clear()
+
+IsInputActive
+Returns whether the chat input is open.
+
+bool inputActive = Chat.IsInputActive()
+
+SendMessage
+Sends a message to the specified player.
+
+Chat.SendMessage(int serverID, string message)
+
+tip
+You can change the text color of message parts by placing a hex color code in a curly bracket in front of it. See the example below.
+
+Example:
+
+Lua
+Squirrel
+-- in client script:
+Events.Subscribe("chatCommand", function(command)
+    if command == "/myping" then
+        Events.CallRemote("commandMyPing", {})
+    end
+end)
+
+-- in server script:
+Events.Subscribe("commandMyPing", function()
+    local source = Events.GetSource()
+
+    Chat.SendMessage(source, "Your ping is: {0000FF}" .. Player.GetPing(source))
+end, true)
+
+BroadcastMessage
+Sends a message to all players.
+
+Chat.BroadcastMessage(string message)
+
+tip
+You can change the text color of message parts by placing a hex color code in a curly bracket in front of it. See the example below.
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("playerDisconnect", function(id, name, reason)
+    Chat.BroadcastMessage("{0000FF}" .. name .. " {FFFFFF}has left the server.")
+end)

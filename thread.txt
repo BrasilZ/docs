@@ -1,0 +1,62 @@
+Thread
+Shared Functions
+Name	Description
+Create	Creates a new thread with a function that is executed asynchronously.
+Pause	Pauses the current thread for the specified duration.
+Create
+Creates a new thread with a function that is executed asynchronously.
+
+Thread.Create(function threadFunc)
+
+warning
+The current implementation does not allow creating a thread within a thread.
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("sessionInit", function()
+    Thread.Create(function()
+        -- Get player model hash key.
+        local playerModel = Game.GetHashKey("M_Y_MULTIPLAYER")
+
+        -- Request model.
+        Game.RequestModel(playerModel)
+
+        -- Wait until model loaded.
+        while not Game.HasModelLoaded(playerModel) do
+            Game.RequestModel(playerModel)
+
+            Thread.Pause(0)
+        end
+
+        -- Change player model.
+        Game.ChangePlayerModel(Game.GetPlayerId(), playerModel)
+
+        -- Release model.
+        Game.MarkModelAsNoLongerNeeded(playerModel)
+    end)
+end)
+
+Pause
+Pauses the current thread for the specified duration.
+
+Thread.Pause(int milliseconds)
+
+warning
+This function can only be used within a thread.
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("scriptInit", function()
+    Thread.Create(function()
+        while true do
+            Thread.Pause(5000)
+
+            -- This message is sent every 5 seconds.
+            Chat.AddMessage("5 seconds are over.")
+        end
+    end)
+end)

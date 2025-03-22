@@ -1,0 +1,36 @@
+HTTP
+Server Functions
+Name	Description
+Request	Makes a synchronous http request.
+RequestAsync	Makes an asynchronous http request.
+Request
+Makes a synchronous http request.
+
+int status, string data = HTTP.Request(string host, string method, string data, string contentType, table headers)
+
+info
+Available HTTP methods are get, post, put, head, delete, patch, options.
+
+Example:
+
+Lua
+Squirrel
+local status, data = HTTP.Request("https://httpbin.org/post", "post", "{}", "application/json", { ["testHeader"] = "test" })
+Console.Log("status: " .. status .. ", data: " .. data)
+
+
+RequestAsync
+Makes an asynchronous http request.
+
+HTTP.Request(string host, string method, string data, string contentType, table headers, function callback)
+
+info
+Available HTTP methods are get, post, put, head, delete, patch, options.
+
+Example:
+
+Lua
+Squirrel
+HTTP.RequestAsync("https://httpbin.org/post", "post", "{}", "application/json", { ["testHeader"] = "test" }, function(status, data)
+    Console.Log("status: " .. status .. ", data: " .. data)
+end)

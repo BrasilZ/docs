@@ -1,0 +1,39 @@
+Game
+On the client side, in addition to the other functions, the so-called native functions are also available, i.e. functions that are originally used in the game scripts.
+
+To use them, simply transform the names into the camelCase format. This involves capitalizing the first letter of each word after the initial word and removing underscores, resulting in a more readable and conventional naming style.
+
+List of native functions: HappinessMP GitHub, GTAMods Wiki
+
+Example:
+
+Lua
+Squirrel
+Thread.Create(function()
+    while true do
+        Thread.Pause(0)
+
+        -- This code spawns a SultanRS when the player presses the F1 key.
+        if Game.IsGameKeyboardKeyJustPressed(59) then
+            local model = Game.GetHashKey("SULTANRS")
+
+            local x, y, z = Game.GetCharCoordinates(Game.GetPlayerChar(Game.GetPlayerId()))
+            local heading = Game.GetCharHeading(Game.GetPlayerChar(Game.GetPlayerId()))
+
+            Game.RequestModel(model)
+
+            while not Game.HasModelLoaded(model) do
+                Thread.Pause(0)
+            end
+
+            local car = Game.CreateCar(model, x, y, z, true)
+            Game.SetCarHeading(car, heading)
+            Game.SetCarOnGroundProperly(car)
+
+            Game.WarpCharIntoCar(Game.GetPlayerChar(Game.GetPlayerId()), car)
+
+            Game.MarkModelAsNoLongerNeeded(model)
+            Game.MarkCarAsNoLongerNeeded(car)
+        end
+    end
+end)

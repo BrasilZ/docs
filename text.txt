@@ -1,0 +1,48 @@
+Text
+Client Functions
+Name	Description
+AddEntry	Add GXT entry.
+AddEntryByHash	Add GXT entry by hash.
+SetLoadingText	Set loading screen text.
+AddEntry
+Add GXT entry.
+
+Text.AddEntry(string key, string label)
+
+tip
+This function can also be used to overwrite existing GXT entries.
+
+Example:
+
+Lua
+Squirrel
+Text.AddEntry("MenuHelp", "~INPUT_PICKUP~ Open Menu")
+
+Thread.Create(function()
+    while true do
+        Thread.Pause(0)
+
+        Game.DrawFrontendHelperText("", "MenuHelp", false)
+    end
+end)
+
+AddEntryByHash
+Add GXT entry by hash.
+
+Text.AddEntryByHash(uint key, string label)
+
+tip
+This function can also be used to overwrite existing GXT entries.
+
+SetLoadingText
+Set loading screen text.
+
+Text.SetLoadingText(string text)
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("sessionInit", function()
+    Text.SetLoadingText("Loading Freeroam...")
+end)

@@ -1,0 +1,23 @@
+Meta File
+The meta file is the heart of a resource. It defines which files should be loaded and how they should be loaded.
+
+A simple meta file could look like this:
+
+<meta type="lua">
+	<script type="client" src="main_cl.lua" />
+	<script type="server" src="main_sv.lua" />
+
+	<export type="client" function="myClientFunc" />
+	<export type="server" function="myServerFunc" />
+
+	<file src="UI/test.html" />
+	<file src="UI/script.js" />
+</meta>
+
+The <meta> element is used to specify the scripting language of the resource (lua / squirrel).
+Use <script> elements to specify the scripts to be loaded and define them as client / server or shared script.
+Client scripts are stored encrypted in the server cache and are downloaded and executed by each connecting player.
+Server scripts are executed exclusively by the server.
+Shared scripts do both.
+Use <export> elements to export functions from this resource, so other resources can use them.
+With <file> elements, you can define files that are to be downloaded by the client in their raw version and are required at a later time. This is necessary for WebUIs, for example.

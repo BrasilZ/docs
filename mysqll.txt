@@ -1,0 +1,124 @@
+MySQL
+Server Functions
+Name	Description
+Connect	Connects to the MySQL server.
+Close	Closes the MySQL connection.
+Execute	Executes a SQL statement with given arguments.
+Select	Retrieves data based on a SQL query and arguments.
+Insert	Inserts data into a table and returns the insert ID.
+Connect
+Connects to the MySQL server.
+
+MySQL.Connect(string host, int port, string user, string password, string database)
+
+info
+The entire MySQL API is based on the X DevAPI. A MySQL server with X plugin is therefore required.
+
+Example:
+
+Lua
+Squirrel
+MySQL.Connect("localhost", 33060, "root", "mypw", "mydb")
+
+Close
+Closes the MySQL connection.
+
+MySQL.Close()
+
+Execute
+This function executes a SQL statement using the provided arguments. It returns the number of rows affected by the execution.
+
+Synchronous (blocking): int affectedRows = MySQL.Execute(string statement, list params)
+
+Asynchronous (non-blocking): MySQL.Execute(string statement, list params, function callback)
+
+Example:
+
+Lua
+Squirrel
+-- in client script:
+Events.Subscribe("chatCommand", function(command)
+    if command == "/register" then
+        Events.CallRemote("registerPlayer", { Player.GetRockstarID() })
+    end
+end)
+
+-- in server script:
+Events.Subscribe("registerPlayer", function(rid)
+    -- sync:
+    local affectedRows = MySQL.Execute("INSERT INTO users (rockstarid, money, admin) VALUES (?, ?, ?)", { rid, 1000, 0 })
+
+    -- async:
+    MySQL.Execute("INSERT INTO users (rockstarid, money, admin) VALUES (?, ?, ?)", { rid, 1000, 0 }, function(affectedRows)
+        Console.Log(affectedRows)
+    end)
+end, true)
+
+
+Select
+This function executes a SQL statement with the given arguments. It returns the resulting data as a table.
+
+Synchronous (blocking): list result = MySQL.Select(string statement, list params)
+
+Asynchronous (non-blocking): MySQL.Select(string statement, list params, function callback)
+
+Example:
+
+Lua
+Squirrel
+-- in client script:
+Events.Subscribe("chatCommand", function(command)
+    if command == "/login" then
+        Events.CallRemote("loginPlayer", { Player.GetRockstarID() })
+    end
+end)
+
+-- in server script:
+Events.Subscribe("loginPlayer", function(rid)
+    -- sync:
+    local result = MySQL.Select("SELECT * FROM users WHERE rockstarid = ?", { rid })
+
+    if #result > 0 then
+        Console.Log("Player exist (money: " .. result[1]["money"] .. ", admin: " .. result[1]["admin"] .. ")")
+    end
+
+    -- async:
+    MySQL.Select("SELECT * FROM users WHERE rockstarid = ?", { rid }, function(result)
+        if #result > 0 then
+            Console.Log("Player exist (money: " .. result[1]["money"] .. ", admin: " .. result[1]["admin"] .. ")")
+        end
+    end)
+end, true)
+
+
+Insert
+This function inserts data into a table using the provided SQL statement and arguments. It returns the ID of the newly inserted row.
+
+Synchronous (blocking): int insertId = MySQL.Insert(string statement, list params)
+
+Asynchronous (non-blocking): MySQL.Insert(string statement, list params, function callback)
+
+warning
+Needs an auto-incremented primary key to work.
+
+Example:
+
+Lua
+Squirrel
+-- in client script:
+Events.Subscribe("chatCommand", function(command)
+    if command == "/register" then
+        Events.CallRemote("registerPlayer", { Player.GetRockstarID() })
+    end
+end)
+
+-- in server script:
+Events.Subscribe("registerPlayer", function(rid)
+    -- sync:
+    local insertId = MySQL.Insert("INSERT INTO users (rockstarid, money, admin) VALUES (?, ?, ?)", { rid, 1000, 0 })
+
+    -- async:
+    MySQL.Insert("INSERT INTO users (rockstarid, money, admin) VALUES (?, ?, ?)", { rid, 1000, 0 }, function(insertId)
+        Console.Log(insertId)
+    end)
+end, true)

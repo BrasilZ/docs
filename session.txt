@@ -1,0 +1,85 @@
+ession
+Server Functions
+Name	Description
+GetSize	Gets the number of players in a session.
+GetHostID	Gets the serverID of a session host.
+GetActivePlayers	Gets the active players of a session.
+GetSize
+Gets the number of players in a session.
+
+int size = Session.GetSize(int sessionID)
+
+warning
+This function also returns players who are assigned to the session but are not yet active.
+
+Example:
+
+Lua
+Squirrel
+-- in client script:
+Events.Subscribe("chatCommand", function(command)
+    if command == "/playercount" then
+        Events.CallRemote("cmdPlayerCount", {})
+    end
+end)
+
+-- in server script:
+Events.Subscribe("cmdPlayerCount", function()
+    local source = Events.GetSource()
+
+    Chat.SendMessage(source, "Current players in your session: " .. Session.GetSize(Player.GetSession(source)))
+end, true)
+
+
+GetHostID
+Gets the serverID of a session host.
+
+int serverID = Session.GetHostID(int sessionID)
+
+Example:
+
+Lua
+Squirrel
+-- in client script:
+Events.Subscribe("chatCommand", function(command)
+    if command == "/host" then
+        Events.CallRemote("cmdHost", {})
+    end
+end)
+
+-- in server script:
+Events.Subscribe("cmdHost", function()
+    local source = Events.GetSource()
+
+    Chat.SendMessage(source, "Current host of your session: " .. Session.GetHostID(Player.GetSession(source)))
+end, true)
+
+GetActivePlayers
+Gets the active players of a session.
+
+list activePlayers = Session.GetActivePlayers(int sessionID)
+
+warning
+This function only returns active players in the session.
+
+Example:
+
+Lua
+Squirrel
+-- in client script:
+Events.Subscribe("chatCommand", function(command)
+    if command == "/players" then
+        Events.CallRemote("cmdPlayers", {})
+    end
+end)
+
+-- in server script:
+Events.Subscribe("cmdPlayers", function()
+    local source = Events.GetSource()
+
+    Chat.SendMessage(source, "Current players in your session:")
+
+    for _, v in pairs(Session.GetActivePlayers(Player.GetSession(source))) do
+        Chat.SendMessage(source, "- " .. Player.GetName(v) .. "(" .. v .. ")")
+    end
+end, true)

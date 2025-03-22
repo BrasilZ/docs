@@ -1,0 +1,126 @@
+Events
+Client Events
+Name	Description
+scriptInit	Called after the player has connected to the server, joined the default session for the first time and all scripts have been loaded.
+sessionInit	Called when the player has joined a session.
+sessionJoin	Called for the host player when a player joins the session.
+sessionEnd	Called when the player starts to leave the session.
+sessionFail	Called when the player failed to host/join session.
+chatCommand	Called when a command is entered in the chat.
+chatSubmit	Called when the player submits a message in the chat.
+webUIReady	Called after the web page has been loaded successfully.
+Server Events
+Name	Description
+playerDisconnect	Called when a player disconnects.
+Shared Events
+Name	Description
+resourceStart	Called after a resource started.
+resourceStop	Called before a resource stops.
+scriptInit
+Called after the player has connected to the server, joined the default session for the first time and all scripts have been loaded.
+
+scriptInit()
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("scriptInit", function()
+    Chat.AddMessage("Welcome to my server.")
+end)
+
+sessionInit
+Called when the player has joined a session.
+
+sessionInit()
+
+sessionJoin
+Called for the host player when a player joins the session.
+
+sessionJoin()
+
+sessionEnd
+Called when the player starts to leave the session.
+
+sessionEnd()
+
+sessionFail
+Called when the player failed to host/join session.
+
+sessionFail(int attempt)
+
+info
+You can cancel this event, to stop the default retry behaviour.
+
+chatCommand
+Called when a command is entered in the chat.
+
+chatCommand(string fullChatMessage)
+
+info
+This event will be only called if the default chat is activated in the server settings.
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("chatCommand", function(command)
+    if command == "/testcmd" then
+        Chat.AddMessage("Test Command!")
+    end
+end)
+
+chatSubmit
+Called when the player submits a message in the chat.
+
+chatSubmit(string chatMessage)
+
+info
+You can cancel this event, to stop the message being sent.
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("chatSubmit", function(message)
+    if string.find(message, "bitch") ~= nil then
+        Events.Cancel() -- don't send message with bad word
+    end
+end)
+
+webUIReady
+Called after the web page has been loaded successfully.
+
+webUIReady(int webuiID)
+
+playerDisconnect
+Called when a player disconnects.
+
+playerDisconnect(int serverID, string playerName, int reason)
+
+info
+Reason IDs:
+0: timeout
+1: quit
+2: kick
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("playerDisconnect", function(id, name, reason)
+    Chat.BroadcastMessage("{0000FF}" .. name .. " {FFFFFF}has left the server.")
+end)
+
+resourceStart
+Called after a resource started.
+
+resourceStart(string resourceName)
+
+resourceStop
+Called before a resource stops.
+
+resourceStop(string resourceName)
+
+info
+If this event is canceled by a server-side handle

@@ -1,0 +1,36 @@
+Exports
+You can export functions from a resource so that other resources can call them.
+
+Create exported function
+First you have to make sure to define your function globally in your script:
+
+Lua
+Squirrel
+function testExportFunc(arg1, arg2)
+    Console.Log("testExportFunc called: " .. arg1 .. ", " .. arg2)
+    return 400, 800
+end
+
+Define exported function
+You will then need to define it in the meta file of your resource:
+
+Lua
+Squirrel
+<meta type="lua">
+	<script type="server" src="server.lua" />
+	<export type="server" function="testExportFunc" />
+</meta>
+
+Call exported function
+You can then call the function in several ways in any other resource:
+
+Lua
+Squirrel
+local res1, res2 = Resource.Call("exporttest", "testExportFunc", { 8, 16 })
+Console.Log("Result of testExportFunc: " .. res1 .. ", " .. res2)
+
+res1, res2 = exports.exporttest:testExportFunc(8, 16)
+Console.Log("Result of testExportFunc: " .. res1 .. ", " .. res2)
+
+res1, res2 = exports["exporttest"]:testExportFunc(8, 16)
+Console.Log("Result of testExportFunc: " .. res1 .. ", " .. res2)

@@ -1,0 +1,14 @@
+Resource
+A Resource is a modular unit that enhances the functionality of GTA IV. It allows you to extend and modify the game through custom scripts and assets.
+
+You have the flexibility to choose the scripting language between Lua and Squirrel based on your preference and requirements.
+
+Structure
+A resource is represented by a folder within the resources directory in the server files, accompanied by a meta file (meta.xml). The meta file specifies the essential details about the resource. Inside this folder, you should organize all resource files as outlined in the meta file. The internal structure of the folder is flexible, allowing you to arrange files in a way that makes sense to you.
+
+Client vs. Server
+Client Side
+The client side of our mod operates within the player's game client. It is responsible for enhancing the player's gaming experience by implementing features such as graphical enhancements, UI modifications, and other client-specific functionalities.
+
+Server Side
+The server side functions within the game server environment. It plays a crucial role in managing interactions between players, handling non-player entities, and executing server-related tasks. This includes managing game events, synchronizing data between players, and enforcing server-side rules for a seamless multiplayer experience.

@@ -1,0 +1,104 @@
+Events
+Shared Functions
+Name	Description
+Subscribe	Subscribe to an event with a callback function.
+Call	Calls an event which will trigger all local subscribers.
+CallRemote	Calls an event which will trigger all subscribers on remote side.
+Cancel	Cancel the current executed event.
+WasLastCanceled	Checks if last completed event was canceled.
+Server Functions
+Name	Description
+BroadcastRemote	Calls an event which will trigger all subscribers on client side for all players.
+GetSource	Gets the server ID of the player from which the last event was triggered.
+Subscribe
+Subscribe to an event with a callback function.
+
+Events.Subscribe(string name, function callbackFunc, [optional] bool isRemoteAllowed)
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("testEvent", function(testint, teststr)
+    Console.Log("testEvent triggered: " .. testint .. ", " .. teststr)
+end, false)
+
+Call
+Calls an event which will immediately trigger all local subscribers.
+
+bool success = Events.Call(string name, list arguments)
+
+warning
+With this function, you can only call events on the same side. Client -> Client or Server -> Server
+
+info
+The return value will be false if the event was canceled.
+
+Example:
+
+Lua
+Squirrel
+Events.Call("testEvent", { 2, "meow" })
+
+CallRemote
+Calls an event which will trigger all subscribers on remote side.
+
+Events.CallRemote(string name, [server only] int serverID, list arguments)
+
+warning
+With this function, you can only call events on the remote side. Client -> Server or Server -> Client
+
+Example:
+
+Lua
+Squirrel
+-- in client script:
+Events.CallRemote("serverEvent", { 1, true })
+
+-- in server script:
+Events.CallRemote("clientEvent", playerid, { 1, true })
+
+Cancel
+Cancel the current executed event.
+
+Events.Cancel()
+
+warning
+This function does not stop further event handlers from being called.
+
+note
+The use of this function outside of an event callback has no effect.
+
+WasLastCanceled
+Checks if last completed event was canceled.
+
+bool canceled = Events.WasLastCanceled()
+
+BroadcastRemote
+Calls an event which will trigger all subscribers on client side for all players.
+
+Events.BroadcastRemote(string name, list arguments)
+
+Example:
+
+Lua
+Squirrel
+Events.BroadcastRemote("clientEvent", { 1, "meow" })
+
+GetSource
+Gets the server ID of the player from which the last event was triggered.
+
+int serverID = Events.GetSource()
+
+warning
+The function may only be used in server events called from the client side.
+
+Example:
+
+Lua
+Squirrel
+Events.Subscribe("testEvent", function()
+    local source = Events.GetSource()
+
+    Console.Log("testEvent was called from " .. Player.GetName(source))
+end, true)
